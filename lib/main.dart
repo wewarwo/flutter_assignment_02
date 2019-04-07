@@ -30,12 +30,12 @@ class listScreen extends StatefulWidget {
 
 class listScreenState extends State<listScreen> {
   int _state = 0;
-  static CRUD todoDB = CRUD();
+  static CRUD todo = CRUD();
   List<Todo> task = [];
   List<Todo> complete = [];
   @override
   Widget build(BuildContext context) {
-    final List list_button = <Widget>[
+    final List button = <Widget>[
       IconButton(
         icon: Icon(Icons.add),
         onPressed: () {
@@ -46,7 +46,7 @@ class listScreenState extends State<listScreen> {
         icon: Icon(Icons.delete),
         onPressed: () async {
           for (var item in complete) {
-            await todoDB.delete(item.id);
+            await todo.delete(item.id);
           }
           setState(() {
             complete = [];
@@ -61,7 +61,7 @@ class listScreenState extends State<listScreen> {
       child: Scaffold(
           appBar: AppBar(
             title: Text("Todo"),
-            actions: <Widget>[_state == 0 ? list_button[0] : list_button[1]],
+            actions: <Widget>[_state == 0 ? button[0] : button[1]],
           ),
           bottomNavigationBar: BottomNavigationBar(
               currentIndex: _state,
@@ -83,7 +83,7 @@ class listScreenState extends State<listScreen> {
           body: _state == 0
               ? Container(
                   child: FutureBuilder<List<Todo>>(
-                      future: todoDB.getAll(),
+                      future: todo.getAll(),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<Todo>> snapshot) {
                         task = [];
@@ -102,13 +102,13 @@ class listScreenState extends State<listScreen> {
                                       (BuildContext context, int index) {
                                     Todo item = task[index];
                                     return ListTile(
-                                      title: Text(item.todoItem),
+                                      title: Text(item.title),
                                       trailing: Checkbox(
                                         onChanged: (bool value) async {
                                           setState(() {
                                             item.done = value;
                                           });
-                                          todoDB.update(item);
+                                          todo.update(item);
                                         },
                                         value: item.done,
                                       ),
@@ -127,7 +127,7 @@ class listScreenState extends State<listScreen> {
                 )
               : Container(
                   child: FutureBuilder<List<Todo>>(
-                      future: todoDB.getAll(),
+                      future: todo.getAll(),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<Todo>> snapshot) {
                         complete = [];
@@ -145,13 +145,13 @@ class listScreenState extends State<listScreen> {
                                       (BuildContext context, int index) {
                                     Todo item = complete[index];
                                     return ListTile(
-                                      title: Text(item.todoItem),
+                                      title: Text(item.title),
                                       trailing: Checkbox(
                                         onChanged: (bool value) async {
                                           setState(() {
                                             item.done = value;
                                           });
-                                          todoDB.update(item);
+                                          todo.update(item);
                                         },
                                         value: item.done,
                                       ),
@@ -182,7 +182,7 @@ class addNote extends StatefulWidget {
 class addNoteState extends State<addNote> {
   final _formkey = GlobalKey<FormState>();
   final myController = TextEditingController();
-  CRUD todoDB = CRUD();
+  CRUD todo = CRUD();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,11 +208,11 @@ class addNoteState extends State<addNote> {
               onPressed: () async {
                 _formkey.currentState.validate();
                 if (myController.text.length > 0) {
-                  await todoDB.open("todoDB.db");
+                  await todo.open("todo.db");
                   Todo data = Todo();
-                  data.todoItem = myController.text;
+                  data.title = myController.text;
                   data.done = false;
-                  await todoDB.insert(data);
+                  await todo.insert(data);
                   Navigator.pop(context);
                 }
               },
