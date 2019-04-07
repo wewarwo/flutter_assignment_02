@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 final String todoTable = "todo";
-final String columnId = "_id";
+final String columnId = "id";
 final String columnTitle = "title";
 final String columnDone = "done";
 
@@ -74,8 +74,8 @@ class CRUD {
 
   Future<List<Todo>> getAll() async {
     await this.open("todo.db");
-    var res = await db
-        .query(todoTable, columns: [columnId, columnTitle, columnDone]);
+    var res =
+        await db.query(todoTable, columns: [columnId, columnTitle, columnDone]);
     List<Todo> todoList =
         res.isNotEmpty ? res.map((c) => Todo.formMap(c)).toList() : [];
     return todoList;
