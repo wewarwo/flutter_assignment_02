@@ -96,7 +96,10 @@ class listScreenState extends State<listScreen> {
                           }
 
                           return task.length != 0
-                              ? ListView.builder(
+                              ? ListView.separated(
+                                  separatorBuilder: (context, index) => Divider(
+                                        color: Colors.black,
+                                      ),
                                   itemCount: task.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -113,6 +116,10 @@ class listScreenState extends State<listScreen> {
                                         value: item.done,
                                       ),
                                     );
+                                    decoration:
+                                    new BoxDecoration(
+                                        border: new Border.all(
+                                            color: Colors.blueAccent));
                                   },
                                 )
                               : Center(
@@ -139,7 +146,10 @@ class listScreenState extends State<listScreen> {
                           }
 
                           return complete.length != 0
-                              ? ListView.builder(
+                              ? ListView.separated(
+                                  separatorBuilder: (context, index) => Divider(
+                                        color: Colors.black,
+                                      ),
                                   itemCount: complete.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
